@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import reducers from './reducers';
 import './style.css'
 
-import App from './App'
+import App from './App';
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)))
 
