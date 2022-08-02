@@ -1,3 +1,3 @@
-# MERN stack App for logging memories of daily events that you consider worth saving.
+# MERN stack App for logging memories. WIP
 
 Technologies used include React, Redux, Node, MongoDb, Expressjs, Material UI
