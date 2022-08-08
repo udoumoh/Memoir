@@ -3,20 +3,44 @@ import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from '@ma
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input.js'
+import {GoogleLogin} from 'react-google-login'
+import Icon from './Icon'
+import {useDispatch} from 'react-redux'
 
 const Auth = () => {
     const classes = useStyles()
-    const isSignup = true;
+    const [isSignup, setIsSignup] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
+    const dispatch = useDispatch()
 
-    const handleChange = () => setShowPassword(prevShowPassword => !prevShowPassword)
+    const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
+
+    const handleChange = () => {
+
+    }
 
     const handleSubmit = () => {
 
     }
 
-    const handleShowPassword = () => {
+    const switchMode = () => {
+        setIsSignup(previousValue => !previousValue)
+        handleShowPassword(false)
+    }
 
+    const googleSuccess = async (res) => {
+        const result = res?.profileObj;
+        const token = res?.tokenId;
+        try {
+            dispatch({ type:'AUTH', data:{ result, token} })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const googleFailure = (error) => {
+        console.log('Google Sign In was Unsuccessful. Try again Later');
+        console.log(error);
     }
   return (
     <Container component="main" maxWidth='xs'>
@@ -30,7 +54,7 @@ const Auth = () => {
                     {isSignup && (
                         <>
                             <Input name='firstName' label='First Name' handleChange={handleChange} autoFocus half />
-                            <Input name='firstName' label='First Name' handleChange={handleChange} half />
+                            <Input name='lastName' label='Last Name' handleChange={handleChange} half />
                         </>
                     )}
                     <Input name='email' label='Email Address' handleChange={handleChange} type='email' />
@@ -40,6 +64,23 @@ const Auth = () => {
                 <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                     { isSignup ? "Sign Up" : "Sign In"}
                 </Button>
+                <GoogleLogin 
+                      clientId="83099645948-su3u8hqs0arnsnbjkjkh1gra765h0ntc.apps.googleusercontent.com"
+                    render={(renderProps) => (
+                    <Button className={classes.googleButton} color='primary' fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant='contained'>
+                     Google Sign In
+                     </Button>
+                )}
+                onSuccess={googleSuccess}
+                onFailure={googleFailure}
+                />
+                <Grid container justifyContent="flex-end">
+                    <Grid item>
+                        <Button onClick={switchMode}>
+                            {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
         </Paper>
     </Container>
