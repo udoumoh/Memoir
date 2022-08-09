@@ -3,7 +3,7 @@ import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from '@ma
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input.js'
-import {GoogleLogin} from 'react-google-login'
+import { GoogleLogin } from '@react-oauth/google';
 import Icon from './Icon'
 import {useDispatch} from 'react-redux'
 
@@ -39,8 +39,8 @@ const Auth = () => {
     }
 
     const googleFailure = (error) => {
-        console.log('Google Sign In was Unsuccessful. Try again Later');
         console.log(error);
+        console.log('Google Sign In was Unsuccessful. Try again Later');
     }
   return (
     <Container component="main" maxWidth='xs'>
@@ -64,8 +64,11 @@ const Auth = () => {
                 <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                     { isSignup ? "Sign Up" : "Sign In"}
                 </Button>
-                <GoogleLogin 
-                      clientId="83099645948-su3u8hqs0arnsnbjkjkh1gra765h0ntc.apps.googleusercontent.com"
+                  <GoogleLogin
+                      onSuccess={ googleSuccess }
+                      onError={ googleFailure }
+                  />
+                {/* <GoogleLogin 
                     render={(renderProps) => (
                     <Button className={classes.googleButton} color='primary' fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant='contained'>
                      Google Sign In
@@ -73,7 +76,7 @@ const Auth = () => {
                 )}
                 onSuccess={googleSuccess}
                 onFailure={googleFailure}
-                />
+                /> */}
                 <Grid container justifyContent="flex-end">
                     <Grid item>
                         <Button onClick={switchMode}>
