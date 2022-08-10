@@ -4,35 +4,51 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input.js'
 import { GoogleLogin } from '@react-oauth/google';
-import Icon from './Icon'
 import {useDispatch} from 'react-redux'
+import jwt_decode from 'jwt-decode'
+import { useHistory } from 'react-router-dom'
+import { signin, signup } from '../../actions/auth'
+
+const initialState = { firstName:'', lastName:'', email:'', password:'', confirmPassword:''}
 
 const Auth = () => {
     const classes = useStyles()
     const [isSignup, setIsSignup] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
     const dispatch = useDispatch()
+    const history = useHistory()
+    const [formData, setFormData] = useState(initialState)
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
 
-    const handleChange = () => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
 
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
 
+        if(isSignup){
+            dispatch(signup(formData, history))
+        }else{
+            dispatch(signin(formData, history))
+        }
     }
 
     const switchMode = () => {
         setIsSignup(previousValue => !previousValue)
-        handleShowPassword(false)
+        setShowPassword(false)
     }
 
     const googleSuccess = async (res) => {
-        const result = res?.profileObj;
-        const token = res?.tokenId;
+        const result = jwt_decode(res.credential)
+        console.log(JSON.stringify(res));
+
         try {
-            dispatch({ type:'AUTH', data:{ result, token} })
+            dispatch({ type:'AUTH', data:{ result } })
+
+            history.push('/')
         } catch (error) {
             console.log(error);
         }
@@ -65,18 +81,9 @@ const Auth = () => {
                     { isSignup ? "Sign Up" : "Sign In"}
                 </Button>
                   <GoogleLogin
-                      onSuccess={ googleSuccess }
-                      onError={ googleFailure }
+                    onSuccess={ googleSuccess }
+                    onError={ googleFailure }
                   />
-                {/* <GoogleLogin 
-                    render={(renderProps) => (
-                    <Button className={classes.googleButton} color='primary' fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant='contained'>
-                     Google Sign In
-                     </Button>
-                )}
-                onSuccess={googleSuccess}
-                onFailure={googleFailure}
-                /> */}
                 <Grid container justifyContent="flex-end">
                     <Grid item>
                         <Button onClick={switchMode}>
