@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom'
 import { signin, signup } from '../../actions/auth'
 
 const initialState = { firstName:'', lastName:'', email:'', password:'', confirmPassword:''}
+
 
 const Auth = () => {
     const classes = useStyles()
@@ -43,10 +44,10 @@ const Auth = () => {
 
     const googleSuccess = async (res) => {
         const result = jwt_decode(res.credential)
-        console.log(JSON.stringify(res));
+        const token = res.credential
 
         try {
-            dispatch({ type:'AUTH', data:{ result } })
+            dispatch({ type:'AUTH', data:{ result, token } })
 
             history.push('/')
         } catch (error) {
@@ -81,8 +82,11 @@ const Auth = () => {
                     { isSignup ? "Sign Up" : "Sign In"}
                 </Button>
                   <GoogleLogin
+                    // clientId={clientId}
+                    buttonText='Sign in with google'
                     onSuccess={ googleSuccess }
                     onError={ googleFailure }
+                    cookiePolicy={'single_host_origin'}
                   />
                 <Grid container justifyContent="flex-end">
                     <Grid item>

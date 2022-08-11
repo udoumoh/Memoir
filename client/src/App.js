@@ -19,7 +19,7 @@ const App = () => {
             </Switch>
         </Container>
         </BrowserRouter>
-        </GoogleOAuthProvider>
+        // </GoogleOAuthProvider>
     )
 }
 
