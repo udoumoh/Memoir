@@ -12,21 +12,19 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
-
+    
     const logout = () => {
       dispatch({ type: 'LOGOUT' })
-
+      
       history.push('/')
-
+      
       setUser(null);
     }
-
+    
     useEffect(() => {
-      const token = user?.token;
-      
+      const token = user?.result?.token;
       if(token){
         const decodedToken = jwt_decode(token);
-
         if(decodedToken.exp * 1000 < new Date().getItem()) logout();
       }
         setUser(JSON.parse(localStorage.getItem('profile')));
@@ -41,8 +39,8 @@ const Navbar = () => {
         <Toolbar className={classes.toolbar}>
             {user ? (
                 <div className={classes.profile}>
-                    <Avatar className={classes.purple} alt={user.result.name} src={user.result.picture}>{user.result.name?.charAt(0)}</Avatar>
-                    <Typography className={classes.userName} variant="h6">{user.result.name}</Typography>
+                    <Avatar className={classes.purple} alt={user.result?.name} src={user.result?.picture}>{user.result.name?.charAt(0)}</Avatar>
+                    <Typography className={classes.userName} variant="h6">{user.result?.name}</Typography>
                     <Button variant="contained" className={classes.logout} color="secondary" onClick={logout} >Log out</Button>
                 </div>
             ) : (
