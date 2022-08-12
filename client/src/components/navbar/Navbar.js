@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react'
+import jwt_decode from 'jwt-decode'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { AppBar, Button, Toolbar, Typography, Avatar } from '@material-ui/core'
 import useStyles from './styles'
@@ -21,13 +22,19 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-      // const token = user?.token;
+      const token = user?.token;
+      
+      if(token){
+        const decodedToken = jwt_decode(token);
+
+        if(decodedToken.exp * 1000 < new Date().getItem()) logout();
+      }
         setUser(JSON.parse(localStorage.getItem('profile')));
     }, [location])
 
 
   return (
-      <AppBar className={classes.appBar} position='static' color=''>
+    <AppBar className={classes.appBar} position='static' color="inherit">
         <div className={classes.brandContainer}>
           <img className={classes.image} src={memories} alt='memories' height='60' />
         </div>

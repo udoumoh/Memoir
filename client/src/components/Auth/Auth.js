@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from '@material-ui/core'
+import React, {useState} from 'react'
+import {Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input.js'
@@ -82,7 +82,6 @@ const Auth = () => {
                     { isSignup ? "Sign Up" : "Sign In"}
                 </Button>
                   <GoogleLogin
-                    // clientId={clientId}
                     buttonText='Sign in with google'
                     onSuccess={ googleSuccess }
                     onError={ googleFailure }
