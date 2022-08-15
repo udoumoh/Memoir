@@ -13,7 +13,6 @@ const Post = ({ post, setCurrentId }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('profile'))
-    // console.log(user);
 
     const Likes = () => {
       if (post.likes.length > 0){
@@ -34,7 +33,7 @@ const Post = ({ post, setCurrentId }) => {
     }
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} raised elevation={6}>
       <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
       <div className={classes.overlay}>
         <Typography variant='h6'>{post.name}</Typography>
